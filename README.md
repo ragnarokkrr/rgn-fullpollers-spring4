@@ -5,14 +5,14 @@ Spring 4 Doodling!!!!!
 ----------------------
 
 
-'''
+```
 java
 
 public class Teste{
 	private String teste;
 }
 
-'''
+```
 
 Devs
 -------
