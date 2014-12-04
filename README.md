@@ -20,5 +20,5 @@ Devs
 | Dev      | E-mail                |
 | -------- | ---------------------:|
 | Nilseu   | ragnarokkrr@gmail.com |
-| Gabriel  | ------  |
+| Gabriel  |gabriel.beck.santos@gmail.com  |
 
