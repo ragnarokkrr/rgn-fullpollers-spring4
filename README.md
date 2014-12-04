@@ -5,8 +5,7 @@ Spring 4 Doodling!!!!!
 ----------------------
 
 
-```
-java
+```java
 
 public class Teste{
 	private String teste;
