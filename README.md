@@ -8,7 +8,9 @@ Spring 4 Doodling!!!!!
 ```java
 
 public class Teste{
-	private String teste;
+	public static void main (String args[]){
+		Arrays.asList("Hello","World").stream().map(System.out::println);
+	}
 }
 
 ```
