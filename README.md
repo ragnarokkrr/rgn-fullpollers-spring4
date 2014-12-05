@@ -18,8 +18,8 @@ public class Teste{
 Devs
 -------
 
-| Dev      | E-mail                |
-| -------- | ---------------------:|
-| Nilseu   | ragnarokkrr@gmail.com |
-| Gabriel  |gabriel.beck.santos@gmail.com  |
+| Dev      | A.K.A.      |E-mail                |
+| -------- |:-----------:|---------------------:|
+| Nilseu   | RagnaRoKKrr |ragnarokkrr@gmail.com |
+| Gabriel  | Grevos      |gabriel.beck.santos@gmail.com  |
 
