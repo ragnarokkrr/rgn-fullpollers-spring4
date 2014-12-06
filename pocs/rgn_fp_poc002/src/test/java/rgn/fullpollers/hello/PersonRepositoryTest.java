@@ -38,16 +38,21 @@ public class PersonRepositoryTest {
     Person johnConnor;
     Person sarahConnor;
     Person kyleReese;
+    Person nickStahl;
+    Person edwardFurlong;
+    Person christianBale;
 
     @Before
     public void setUp() {
         johnConnor = new Person("John", "Connor");
         sarahConnor = new Person("Sarah", "Connor");
         kyleReese = new Person("Kyle", "Reese");
+        nickStahl = new Person("Nick", "Stahl");
+        edwardFurlong = new Person("Edward", "Furlong");
+        christianBale = new Person("Christian", "Bale");
 
         personRepository.deleteAll();
-        personRepository.save(Arrays.asList(johnConnor, sarahConnor, kyleReese));
-
+        personRepository.save(Arrays.asList(johnConnor, sarahConnor, kyleReese, nickStahl, edwardFurlong, christianBale));
 
         RestAssured.port = port;
     }
@@ -57,15 +62,36 @@ public class PersonRepositoryTest {
         Long johnConnorId = johnConnor.getId();
 
         when().
-                get("/people/{id}", johnConnorId).
+                get("/rest/people/{id}", johnConnorId).
                 then().
+                log().everything().
                 statusCode(HttpStatus.SC_OK).
                 body("firstName", is("John")).
                 body("lastName", is("Connor"));
-                //TODO Resolver  NPE
-                //body("id", is(johnConnorId))
+        //TODO Resolver  NPE
+        //body("id", is(johnConnorId))
         ;
 
     }
+
+    @Test
+    public void canFetchAllConnors() {
+        when().
+                get("/rest/people/search/findByLastName?name={name}", "Connor").
+                then().
+                log().everything().
+                statusCode(HttpStatus.SC_OK);
+    }
+
+
+    @Test
+    public void canFetchSarah() {
+        when().
+                get("/rest/people/search/findByFirstName?name={name}", "Sarah").
+                then().
+                log().everything().
+                statusCode(HttpStatus.SC_OK);
+    }
+
 
 }
