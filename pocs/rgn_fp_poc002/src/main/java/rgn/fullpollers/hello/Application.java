@@ -1,8 +1,9 @@
 package rgn.fullpollers.hello;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -22,16 +23,24 @@ import java.util.List;
 @Import({RepositoryRestMvcConfiguration.class, RestDataConfig.class})
 @ComponentScan
 @EnableAutoConfiguration
-public class Application {
-    public static void main(String[] args) {
-        ConfigurableApplicationContext appCtx = SpringApplication.run(Application.class, args);
+public class Application implements CommandLineRunner {
 
-        PersonRepository personRepository = appCtx.getBean(PersonRepository.class);
+    @Autowired
+    private PersonRepository personRepository;
+
+    @Override
+    public void run(String... strings) throws Exception {
+/*
         personRepository.deleteAll();
         personRepository.save(populatePersons());
+*/
     }
 
-    private static List<Person> populatePersons() {
+    public static void main(String[] args) {
+        SpringApplication.run(Application.class, args);
+    }
+
+    private List<Person> populatePersons() {
         Person johnConnor;
         Person sarahConnor;
         Person kyleReese;
