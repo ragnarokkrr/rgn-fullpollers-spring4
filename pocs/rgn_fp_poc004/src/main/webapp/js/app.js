@@ -18,7 +18,7 @@ taskManagerModule.controller('taskManagerController', function($scope, $http){
                 }
                 for(var i = 0; i < $scope.tasks.length; i++){
                     if($scope.tasks[i].taskStatus == 'COMPLETED'){
-                        $scope.selection.push($scope.tasks[i].id);
+                        $scope.selection.push($scope.tasks[i]._links.self.href);
                     }
                 }
                 $scope.taskName="";
@@ -54,23 +54,23 @@ taskManagerModule.controller('taskManagerController', function($scope, $http){
 
     //toggleSelection for a given tasks by task id
     $scope.toggleSelection= function toggleSelection(taskUri){
-        var idx = $scope.slection.indexOf(taskUri);
+        var idx = $scope.selection.indexOf(taskUri);
 
         //is currently selectted
         //HTTP PATCH  to ACTIVE state
         if(idx > -1){
-            $http.patch(taskUri, {taskStatus:'ACTIVE'})
-                .success(function(data){
-                    alert("Task unmarked")
-                    findAllTasks();
-                });
+
+            $http({ method: 'PATCH', url: taskUri
+                , data: {taskStatus:'ACTIVE'}
+                , headers: {'Accept': 'application/json'}});
+
+            findAllTasks();
             $scope.selection.splice(idx, 1);
         } else {
-            $http.patch(taskUri, {taskStatus:'COMPLETED'})
-                .success(function(data){
-                    alert("Task marked completed")
-                    findAllTasks();
-                });
+            $http({ method: 'PATCH', url: taskUri
+                , data: {taskStatus:'COMPLETED'}
+                , headers: {'Accept': 'application/json'}});
+            findAllTasks();
             $scope.selection.push(taskUri);
         }
 
@@ -78,9 +78,11 @@ taskManagerModule.controller('taskManagerController', function($scope, $http){
 
     //Archive COmpleted Tasks
     $scope.archiveTasks = function archiveTasks(){
-        $scope;selection.forEach(function(taskUri){
+        $scope.selection.forEach(function(taskUri){
             if(taskUri != undefined){
-                $http.patch(taskUri, {taskArchived: 1});
+                $http({ method: 'PATCH', url: taskUri
+                    , data: {taskArchived: 1}
+                    , headers: {'Accept': 'application/json'}});
             }
         });
         alert("Successfully Archived");
