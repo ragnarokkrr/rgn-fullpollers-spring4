@@ -6,7 +6,4 @@ Features
 
 
 *Active MQ*
-:   Embedded
-
-
-
+:   Embedded Apenas AMQ.
