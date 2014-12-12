@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html ng-app="senderApp">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Ragna</title>
+    <link rel='stylesheet' href='/webjars/bootstrap/3.1.1/css/bootstrap.min.css'>
+    <script src="webjars/angularjs/1.2.16/angular.min.js"></script>
+    <script src="webjars/angular-ui-bootstrap/0.12.0/ui-bootstrap.js"></script>
+
+    <!--
+        <script src="webjars/stomp-js/ca2e094679/frame.js"></script>
+        <script src="webjars/stomp-js/ca2e094679/stomp-exceptions.js"></script>
+        <script src="webjars/stomp-js/ca2e094679/stomp-utils.js"></script>
+        <script src="webjars/stomp-js/ca2e094679/stomp.js"></script>
+        -->
+    <script src="webjars/stomp-websocket/2.3.1/stomp.js"></script>
+    <script src="angular-stomp.js"></script>
+    <script src="webjars/sockjs-client/0.3.4/sockjs.js"></script>
+    <script>
+
+        var senderApp = angular.module("senderApp", []);
+        var socket = new SockJS('/hello-world');
+        var stompClient = Stomp.over(socket);
+
+
+        senderApp.controller("MyController", function($scope, $http) {
+            $scope.messages = [];
+
+			$scope.sendMessage= function sendMessage(){
+                $scope.sendMessage = function() {
+                    stompClient.send("/app/hello-world", {}, JSON.stringify( {'name': $scope.message} ));
+                    $scope.message = "";
+                };
+            };
+
+            stompClient.connect({}, function(frame){
+                console.log('Connected: ' + frame);
+                stompClient.subscribe('/topic/greetings', function(greeting){
+                    showGreeting(JSON.parse(greeting.body).content);
+                });
+            });
+
+
+
+            function showGreeting(message){
+                $scope.messages.push(message);
+                $scope.$apply();
+            }
+        });
+
+// http://www.gilesthomas.com/2013/02/a-super-simple-chat-app-with-angularjs-sockjs-and-node-js/
+
+
+    </script>
+</head>
+<body>
+<div class="page-header">
+    <h1>Sender 01</h1>
+</div>
+<div ng-controller="MyController">
+    <h4>Dynamic Sender</h4>
+
+    <ul>
+        <li ng-repeat="message in messages">{{message}}</li>
+    </ul>
+
+    <div class="form-group">
+        <label>Message:</label>
+        <input ng-model="message" type="text" class="form-control">
+    </div>
+    <button class="btn btn-default" ng-click="sendMessage()">Send</button>
+</div>
+
+</body>

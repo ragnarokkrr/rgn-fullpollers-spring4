@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html ng-app="receiverApp">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Ragna</title>
+    <link rel='stylesheet' href='/webjars/bootstrap/3.1.1/css/bootstrap.min.css'>
+    <script src="webjars/angularjs/1.2.16/angular.min.js"></script>
+    <script src="webjars/angular-ui-bootstrap/0.12.0/ui-bootstrap.js"></script>
+    <script src="webjars/stomp-websocket/2.3.1/stomp.js"></script>
+    <script src="webjars/stomp-js/ca2e094679/stomp.js"></script>
+    <script src="angular-stomp.js"></script>
+    <script>
+
+        var receiverApp = angular.module("receiverApp", []);
+
+        receiverApp.controller("MyController", function($scope, $http) {
+
+			$scope.refresh = function(){
+                $http.get("http://localhost:8080/rest/people").success(function (data){
+                    $scope.items = data._embedded.people;
+                }).error(function(error){
+				    $scope.items.error = error;
+			    });
+			};
+
+			$scope.sendMessage = function sendMessage(){
+			    alert("YO! " + $scope.message);
+			};
+        });
+
+
+    </script>
+</head>
+<body>
+<div class="page-header">
+    <h1>Receiver 01</h1>
+</div>
+<div ng-controller="MyController">
+    <h4>Dynamic Receiver</h4>
+
+    <div class="form-group">
+        <label>Message:</label>
+        <input ng-model="message" type="text" class="form-control">
+    </div>
+    <button class="btn btn-default" ng-click="sendMessage()">Receive</button>
+</div>
+
+</body>
