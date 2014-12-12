@@ -1,5 +1,6 @@
 package rgn.fullpollers.hello;
 
+import org.apache.camel.LoggingLevel;
 import org.apache.camel.builder.RouteBuilder;
 import org.springframework.context.annotation.Configuration;
 
@@ -21,5 +22,8 @@ public class CamelRoute extends RouteBuilder {
                 .otherwise()
                 .to("jms:queue:book.expensive");
 
+
+        from("jms:queue:teste-jms").log(LoggingLevel.IN, ">>>>>>> ${body}").to("stream:out");
     }
+
 }

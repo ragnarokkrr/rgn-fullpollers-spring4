@@ -1,5 +1,7 @@
 package rgn.fullpollers.hello;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
@@ -21,6 +23,9 @@ public class HelloWorldController {
     private static final String template = "Hello, %s";
     private final AtomicLong counter = new AtomicLong();
 
+    @Autowired
+    JmsTemplate jmsTemplate;
+
     @RequestMapping(value = "/hello", method = RequestMethod.GET)
     public
     @ResponseBody
@@ -35,5 +40,16 @@ public class HelloWorldController {
         Thread.sleep(3000);
         return new Greeting(counter.incrementAndGet(), "Hello, " + message.getName() + "!");
     }
+
+
+    @RequestMapping(value = "/hello2", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    Greeting sayHello2(@RequestParam(value = "name", required = false, defaultValue = "Stranger") String name) throws InterruptedException {
+        jmsTemplate.convertAndSend("teste-jms", name);
+
+        return new Greeting(counter.incrementAndGet(), String.format(template, name));
+    }
+
 
 }
