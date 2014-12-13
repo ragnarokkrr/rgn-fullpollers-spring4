@@ -23,7 +23,7 @@ public class CamelRoute extends RouteBuilder {
                 .to("jms:queue:book.expensive");
 
 
-        from("jms:queue:teste-jms").log(LoggingLevel.IN, ">>>>>>> ${body}").to("stream:out");
+        from("jms:queue:teste-jms").log(LoggingLevel.INFO, ">>>>>>> ${body}").to("stream:out");
     }
 
 }
