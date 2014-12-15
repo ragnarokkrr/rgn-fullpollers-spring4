@@ -29,3 +29,12 @@ public class EquipamentoStore {
     //campos de localizacao desnormalizados
 }
 ```
+
+
+References
+----------
+
+* http://bootsnipp.com/snippets/featured/payment-form-with-total-preview
+* http://angular-ui.github.io/bootstrap/
+* https://github.com/spring-projects/spring-data-jpa/blob/master/src/test/java/org/springframework/data/jpa/repository/sample/UserRepository.java#L526
+
