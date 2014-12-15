@@ -1,11 +1,72 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="siloApp">
 <head lang="en">
     <meta charset="UTF-8">
-    <title></title>
+    <title>Silo</title>
+    <script src="webjars/angularjs/1.2.16/angular.min.js"></script>
+    <script src="webjars/angularjs/1.2.16/angular-route.js"></script>
+    <script src="webjars/angularjs/1.2.16/angular-resource.js"></script>
+    <link rel='stylesheet' href='/webjars/bootstrap/3.1.1/css/bootstrap.min.css'>
+    <link rel='stylesheet' href='/webjars/bootstrap/3.1.1/css/bootstrap-theme.min.css'>
+    <script src="webjars/angular-ui-bootstrap/0.12.0/ui-bootstrap.js"></script>
+    <script src="webjars/angular-ui-bootstrap/0.12.0/ui-bootstrap-tpls.js"></script>
+
+    <script>
+        angular.module('siloApp', ['ngRoute', 'ui.bootstrap'])
+            .config(function ($routeProvider){
+                $routeProvider.when("/equipments", {
+                    templateUrl: "/views/equipments.html"
+                })
+                $routeProvider.otherwise("/siloes", {
+                    templateUrl: "/views/siloes.html"
+                })
+
+            });
+
+
+
+
+    </script>
+    <script src="silo.js"></script>
 </head>
-<body>
-<h1>FullPollers</h1>
+<body ng-controller="mainCtrl">
+<style>
+    .navbar-inner {
+    min-height: 0px;
+    }
+
+    .navbar-brand,
+    .navbar-nav li a {
+    line-height: 130px;
+    height: 130px;
+    padding-top: 0;
+    }
+
+</style>
+
+
+<div class="navbar navbar-inverse">
+    <a class="navbar-brand" href="#">
+        <img style="max-width:100px; margin-top: -7px;"
+            src="/fullpollers.jpg"/> Equipment Data SILO </a>
+</div>
+
+
+<div class="alert alert-danger" ng-show="data.error">
+    Error ({{data.error.status}}). The product data was not loaded.
+    <a href="/index.html" class="">Click here to try again</a>
+</div>
+
+
+<tabset vertical="false" type="pills">
+    <tab heading="My Silo">
+        <ng-include src="'views/siloes.html'"></ng-include>
+    </tab>
+    <tab heading="Equipments">
+
+        <ng-include src="'views/equipments.html'"></ng-include>
+    </tab>
+</tabset>
 
 </body>
 </html>

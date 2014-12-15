@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<!-- saved from url=(0032)http://localhost:8090/index.html -->
+<html ng-app="siloApp" class="ng-scope"><head lang="en"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style type="text/css">@charset "UTF-8";[ng\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide{display:none !important;}ng\:form{display:block;}.ng-animate-block-transitions{transition:0s all!important;-webkit-transition:0s all!important;}</style>
+    <meta charset="UTF-8">
+    <title>Silo</title>
+    <script src="./Silo_files/angular.min.js"></script>
+    <script src="./Silo_files/angular-route.js"></script>
+    <script src="./Silo_files/angular-resource.js"></script>
+    <link rel="stylesheet" href="http://localhost:8090/webjars/bootstrap/3.1.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://localhost:8090/webjars/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+    <script src="./Silo_files/ui-bootstrap.js"></script>
+    <script src="./Silo_files/ui-bootstrap-tpls.js"></script>
+
+    <script>
+        angular.module('siloApp', ['ngRoute', 'ui.bootstrap'])
+            .config(function ($routeProvider){
+                $routeProvider.when("/equipments", {
+                    templateUrl: "/views/equipments.html"
+                })
+                $routeProvider.otherwise("/siloes", {
+                    templateUrl: "/views/siloes.html"
+                })
+
+            });
+
+
+
+
+    </script>
+    <script src="./Silo_files/silo.js"></script>
+<style id="style-1-cropbar-clipper">/* Copyright 2014 Evernote Corporation. All rights reserved. */
+.en-markup-crop-options {
+    top: 18px !important;
+    left: 50% !important;
+    margin-left: -100px !important;
+    width: 200px !important;
+    border: 2px rgba(255,255,255,.38) solid !important;
+    border-radius: 4px !important;
+}
+
+.en-markup-crop-options div div:first-of-type {
+    margin-left: 0px !important;
+}
+</style></head>
+<body ng-controller="mainCtrl" class="ng-scope" data-feedly-mini="yes">
+<style>
+    .navbar-inner {
+    min-height: 0px;
+    }
+
+    .navbar-brand,
+    .navbar-nav li a {
+    line-height: 130px;
+    height: 130px;
+    padding-top: 0;
+    }
+
+</style>
+
+
+<div class="navbar navbar-inverse">
+    <a class="navbar-brand" href="http://localhost:8090/index.html#">
+        <img style="max-width:100px; margin-top: -7px;" src="./Silo_files/fullpollers.jpg"> Equipment Data SILO </a>
+</div>
+
+
+<div class="alert alert-danger" ng-show="data.error">
+    Error ({{data.error.status}}). The product data was not loaded.
+    <a href="./Silo_files/Silo.html" class="">Click here to try again</a>
+</div>
+
+
+<div vertical="false" type="pills">
+  <ul class="nav nav-{{type || &#39;tabs&#39;}}" ng-class="{&#39;nav-stacked&#39;: vertical, &#39;nav-justified&#39;: justified}" ng-transclude=""></ul>
+  <div class="tab-content">
+    <!-- ngRepeat: tab in tabs -->
+  </div>
+</div>
+
+
+<div id="menu_item" class="jjMenuItemDiv" style="display: none;">Copy without formatting</div><div id="feedly-mini" title="feedly Mini tookit"></div></body><object id="b979da98-2acb-8bac-8b18-0b8a9a8494b9" width="0" height="0" type="application/gas-events-uni"></object></html>
