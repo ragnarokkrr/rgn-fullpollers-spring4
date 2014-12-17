@@ -4,10 +4,6 @@ Equipamento - Shard Manager
 Features
 --------
 
-* JPA
-* Flyway
-* Spring Data
-* h2
 * WebJars
     * bootstrap
     * angular-ui-bootstrap
@@ -16,12 +12,9 @@ Features
 * active mq
 * apache camel
 
-Esboço de Classes
------------------
 
-```java
-public class EquipamentoStore {
+References
+----------
 
-    //campos de localizacao desnormalizados
-}
-```
+* http://spring.io/guides/tutorials/bookmarks/
+* http://spring.io/guides/gs/rest-service/
