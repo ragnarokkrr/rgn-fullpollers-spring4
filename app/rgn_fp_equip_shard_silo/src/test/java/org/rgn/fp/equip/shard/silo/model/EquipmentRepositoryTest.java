@@ -1,6 +1,8 @@
 package org.rgn.fp.equip.shard.silo.model;
 
 import com.jayway.restassured.RestAssured;
+import com.jayway.restassured.http.ContentType;
+import com.jayway.restassured.response.Header;
 import org.apache.http.HttpStatus;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,9 +15,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Arrays;
-
-import static com.jayway.restassured.RestAssured.when;
+import static com.jayway.restassured.RestAssured.*;
 
 /**
  * Test for {@link EquipmentRepository}.
@@ -27,6 +27,9 @@ import static com.jayway.restassured.RestAssured.when;
 @WebAppConfiguration
 @IntegrationTest("server.port:0")
 public class EquipmentRepositoryTest {
+    static final String APPLICATION_JSON = "application/json";
+    static Header acceptJson = new Header("Accept", APPLICATION_JSON);
+
     @Value("${local.server.port}")
     int port;
 
@@ -48,14 +51,51 @@ public class EquipmentRepositoryTest {
 
     @Test
     public void canPutEquip() {
+
+        Equipment equipment = givenEquipment(20);
+
+        given().
+                contentType(ContentType.JSON).
+                header(acceptJson).
+                pathParam("id", equipment.getId()).
+                body(equipment).
+                when().
+                put("/rest/equipments/{id}").
+                then().
+                log().everything().
+                statusCode(HttpStatus.SC_CREATED);
+    }
+
+    @Test
+    public void canPutEquipWithTemplate() {
+
+        Equipment equipment = givenEquipment(30);
+
         RestTemplate restTemplate = new RestTemplate();
+        String baseUrl = baseURI + ":" + port;
+        restTemplate.put(baseUrl + "/rest/equipments/{id}", equipment, equipment.getId());
 
         when().
-                post("/rest/equipments/search/findByName?name={name}", "Equip1").
+                get("/rest/equipments/" + 30).
                 then().
                 log().everything().
                 statusCode(HttpStatus.SC_OK);
+
+
     }
 
+    private Equipment givenEquipment(int id) {
+        City city = new City();
+        city.setId(1);
+        city.setName("Porto Alegre");
+        city.setState(StateEnum.RS);
+
+        Equipment equipment = new Equipment();
+        equipment.setCity(city);
+
+        equipment.setId(id);
+        equipment.setName("Equip" + id);
+        return equipment;
+    }
 
 }
