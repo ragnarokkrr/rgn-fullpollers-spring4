@@ -81,6 +81,10 @@ public class EquipmentControllerTest {
         equipmentVO.setCityName("Porto Alegre");
         equipmentVO.setCityState("RS");
         equipmentVO.setName("Equip" + id);
+        equipmentVO.setDescription("Equip" + id + " Description");
+        equipmentVO.setEquipmentId("1");
+        equipmentVO.setEquipmentName("Model R2D2");
+        equipmentVO.setEquipmentModelCode("R2D2");
 
         return equipmentVO;
     }
@@ -92,6 +96,10 @@ public class EquipmentControllerTest {
         equipmentVO.setCityName("Rio de Janeiro");
         equipmentVO.setCityState("RJ");
         equipmentVO.setName("Equip" + id);
+        equipmentVO.setDescription("Equip" + id + " Description");
+        equipmentVO.setEquipmentId("1");
+        equipmentVO.setEquipmentName("Model R2D2");
+        equipmentVO.setEquipmentModelCode("R2D2");
 
         return equipmentVO;
     }

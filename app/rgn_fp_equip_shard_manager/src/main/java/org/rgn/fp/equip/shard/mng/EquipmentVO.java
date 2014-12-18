@@ -12,9 +12,13 @@ import java.io.Serializable;
 public class EquipmentVO implements Serializable {
 
     private String name;
+    private String description;
     private String cityId;
     private String cityName;
     private String cityState;
+    private String equipmentId;
+    private String equipmentName;
+    private String equipmentModelCode;
 
 
     public String getName() {
@@ -23,6 +27,14 @@ public class EquipmentVO implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getCityId() {
@@ -49,6 +61,30 @@ public class EquipmentVO implements Serializable {
         this.cityState = cityState;
     }
 
+    public String getEquipmentId() {
+        return equipmentId;
+    }
+
+    public void setEquipmentId(String equipmentId) {
+        this.equipmentId = equipmentId;
+    }
+
+    public String getEquipmentName() {
+        return equipmentName;
+    }
+
+    public void setEquipmentName(String equipmentName) {
+        this.equipmentName = equipmentName;
+    }
+
+    public String getEquipmentModelCode() {
+        return equipmentModelCode;
+    }
+
+    public void setEquipmentModelCode(String equipmentmodelCode) {
+        this.equipmentModelCode = equipmentmodelCode;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -58,14 +94,19 @@ public class EquipmentVO implements Serializable {
         EquipmentVO that = (EquipmentVO) o;
 
         return Objects.equal(this.name, that.name) &&
+                Objects.equal(this.description, that.description) &&
                 Objects.equal(this.cityId, that.cityId) &&
                 Objects.equal(this.cityName, that.cityName) &&
-                Objects.equal(this.cityState, that.cityState);
+                Objects.equal(this.cityState, that.cityState) &&
+                Objects.equal(this.equipmentId, that.equipmentId) &&
+                Objects.equal(this.equipmentName, that.equipmentName) &&
+                Objects.equal(this.equipmentModelCode, that.equipmentModelCode);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(name, cityId, cityName, cityState);
+        return Objects.hashCode(name, description, cityId, cityName, cityState, equipmentId,
+                equipmentName, equipmentModelCode);
     }
 
 
@@ -73,9 +114,13 @@ public class EquipmentVO implements Serializable {
     public String toString() {
         return Objects.toStringHelper(this)
                 .add("name", name)
+                .add("description", description)
                 .add("cityId", cityId)
                 .add("cityName", cityName)
                 .add("cityState", cityState)
+                .add("equipmentId", equipmentId)
+                .add("equipmentName", equipmentName)
+                .add("equipmentModelCode", equipmentModelCode)
                 .toString();
     }
 }

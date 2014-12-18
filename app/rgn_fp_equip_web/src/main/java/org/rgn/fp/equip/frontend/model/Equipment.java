@@ -1,32 +1,24 @@
-package org.rgn.fp.equip.shard.silo.model;
+package org.rgn.fp.equip.frontend.model;
 
 import com.google.common.base.Objects;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
 import java.io.Serializable;
 
 /**
  * Equipment.
  *
+ * It a little bit inverted.
+ *
  * @author ragnarokkrr
  */
-@Entity
-public class Equipment implements Serializable {
+public class Equipment implements Serializable{
+
     private long id;
     private String name;
     private String description;
-    private EquipmentModel equipmentModel;
+    private EquipmentModel model;
     private City city;
 
-    @Id
-/*
-    @GeneratedValue(generator = "system-uuid")
-    @GenericGenerator(name = "system-uuid", strategy = "uuid2")
-*/
-    //@GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", unique = true)
     public long getId() {
         return id;
     }
@@ -51,12 +43,12 @@ public class Equipment implements Serializable {
         this.description = description;
     }
 
-    public EquipmentModel getEquipmentModel() {
-        return equipmentModel;
+    public EquipmentModel getModel() {
+        return model;
     }
 
-    public void setEquipmentModel(EquipmentModel equipmentModel) {
-        this.equipmentModel = equipmentModel;
+    public void setModel(EquipmentModel model) {
+        this.model = model;
     }
 
     public City getCity() {
@@ -78,13 +70,13 @@ public class Equipment implements Serializable {
         return Objects.equal(this.id, that.id) &&
                 Objects.equal(this.name, that.name) &&
                 Objects.equal(this.description, that.description) &&
-                Objects.equal(this.equipmentModel, that.equipmentModel) &&
+                Objects.equal(this.model, that.model) &&
                 Objects.equal(this.city, that.city);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id, name, description, equipmentModel, city);
+        return Objects.hashCode(id, name, description, model, city);
     }
 
 
@@ -94,7 +86,7 @@ public class Equipment implements Serializable {
                 .add("id", id)
                 .add("name", name)
                 .add("description", description)
-                .add("equipmentModel", equipmentModel)
+                .add("model", model)
                 .add("city", city)
                 .toString();
     }

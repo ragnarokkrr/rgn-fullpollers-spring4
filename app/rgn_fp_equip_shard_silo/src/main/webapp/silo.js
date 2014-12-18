@@ -41,17 +41,16 @@ angular.module("siloApp")
             $scope.currentPage = pageNo;
 
             console.log('Page set to: ' + $scope.currentPage);
-
         };
 
         $scope.pageChanged = function() {
+            console.log('Page changed event: ' + $scope.currentPage);
             var pageNo = $scope.currentPage - 1;
             $http.get(equipmentUrl + "?page="+ pageNo + "&size=3")
                 .success(function(data){
                     $scope.data.equipments = data._embedded.equipments;
                     $scope.totalItems = data.page.totalElements;
                     $scope.currentPage = data.page.number;
-
                 })
                 .error(function(error){
                     $scope.data.error = error;
