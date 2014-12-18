@@ -4,6 +4,9 @@
             <thead class="cf">
             <tr>
                 <th>Name</th>
+                <th>Description</th>
+                <th>Model Code</th>
+                <th>Model Name</th>
                 <th>City</th>
                 <th>State</th>
             </tr>
@@ -11,6 +14,9 @@
             <tbody>
             <tr ng-repeat="equipment in data.equipments">
                 <td data-title="Name">{{equipment.name}}</td>
+                <td data-title="Description">{{equipment.description}}</td>
+                <td data-title="Model Code">{{equipment.equipmentModel.modelCode}}</td>
+                <td data-title="Model Name">{{equipment.equipmentModel.name}}</td>
                 <td data-title="City">{{equipment.city.name}}</td>
                 <td data-title="State">{{equipment.city.state}}</td>
             </tr>
