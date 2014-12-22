@@ -18,7 +18,9 @@ public class EquipmentVO implements Serializable {
     private String cityState;
     private String equipmentId;
     private String equipmentName;
+    private String equipmentModelId;
     private String equipmentModelCode;
+    private String equipmentModelName;
 
 
     public String getName() {
@@ -85,6 +87,21 @@ public class EquipmentVO implements Serializable {
         this.equipmentModelCode = equipmentmodelCode;
     }
 
+    public String getEquipmentModelId() {
+        return equipmentModelId;
+    }
+
+    public void setEquipmentModelId(String equipmentModelId) {
+        this.equipmentModelId = equipmentModelId;
+    }
+
+    public String getEquipmentModelName() {
+        return equipmentModelName;
+    }
+
+    public void setEquipmentModelName(String equipmentModelName) {
+        this.equipmentModelName = equipmentModelName;
+    }
 
     @Override
     public boolean equals(Object o) {

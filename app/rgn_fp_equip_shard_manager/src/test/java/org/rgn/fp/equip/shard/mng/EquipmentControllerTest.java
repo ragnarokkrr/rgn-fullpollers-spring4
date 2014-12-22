@@ -52,6 +52,7 @@ public class EquipmentControllerTest {
                 everything().
                 statusCode(HttpStatus.SC_OK);
 
+/*
         EquipmentVO equipmentVORio = givenEquipmentVORio(100);
 
         given().
@@ -64,6 +65,7 @@ public class EquipmentControllerTest {
                 log().
                 everything().
                 statusCode(HttpStatus.SC_OK);
+*/
 
 
         try {
@@ -84,7 +86,9 @@ public class EquipmentControllerTest {
         equipmentVO.setDescription("Equip" + id + " Description");
         equipmentVO.setEquipmentId("1");
         equipmentVO.setEquipmentName("Model R2D2");
+        equipmentVO.setEquipmentModelId("1");
         equipmentVO.setEquipmentModelCode("R2D2");
+        equipmentVO.setEquipmentModelName("Model R2D2");
 
         return equipmentVO;
     }

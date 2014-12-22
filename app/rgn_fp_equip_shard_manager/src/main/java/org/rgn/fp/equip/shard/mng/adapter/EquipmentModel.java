@@ -5,16 +5,14 @@ import com.google.common.base.Objects;
 import java.io.Serializable;
 
 /**
- * Equipment.
+ * EquipmentType;
  *
  * @author ragnarokkrr
  */
-public class Equipment implements Serializable {
+public class EquipmentModel implements Serializable {
     private long id;
     private String name;
-    private String description;
-    private City city;
-    private EquipmentModel equipmentModel;
+    private String modelCode;
 
     public long getId() {
         return id;
@@ -32,45 +30,30 @@ public class Equipment implements Serializable {
         this.name = name;
     }
 
-    public String getDescription() {
-        return description;
+    public String getModelCode() {
+        return modelCode;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setModelCode(String modelCode) {
+        this.modelCode = modelCode;
     }
 
-    public City getCity() {
-        return city;
-    }
-
-    public void setCity(City city) {
-        this.city = city;
-    }
-
-    public EquipmentModel getEquipmentModel() {
-        return equipmentModel;
-    }
-
-    public void setEquipmentModel(EquipmentModel equipmentModel) {
-        this.equipmentModel = equipmentModel;
-    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Equipment that = (Equipment) o;
+        EquipmentModel that = (EquipmentModel) o;
 
         return Objects.equal(this.id, that.id) &&
                 Objects.equal(this.name, that.name) &&
-                Objects.equal(this.city, that.city);
+                Objects.equal(this.modelCode, that.modelCode);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id, name, city);
+        return Objects.hashCode(id, name, modelCode);
     }
 
 
@@ -79,7 +62,7 @@ public class Equipment implements Serializable {
         return Objects.toStringHelper(this)
                 .add("id", id)
                 .add("name", name)
-                .add("city", city)
+                .add("modelCode", modelCode)
                 .toString();
     }
 }
