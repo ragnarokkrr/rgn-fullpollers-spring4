@@ -69,7 +69,7 @@ public class EquipmentControllerTest {
 
 
         try {
-            Thread.sleep(3 * 1000);
+            Thread.sleep(5 * 1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -84,7 +84,7 @@ public class EquipmentControllerTest {
         equipmentVO.setCityState("RS");
         equipmentVO.setName("Equip" + id);
         equipmentVO.setDescription("Equip" + id + " Description");
-        equipmentVO.setEquipmentId("1");
+        equipmentVO.setEquipmentId(Integer.toString(id));
         equipmentVO.setEquipmentName("Model R2D2");
         equipmentVO.setEquipmentModelId("1");
         equipmentVO.setEquipmentModelCode("R2D2");
@@ -101,9 +101,11 @@ public class EquipmentControllerTest {
         equipmentVO.setCityState("RJ");
         equipmentVO.setName("Equip" + id);
         equipmentVO.setDescription("Equip" + id + " Description");
-        equipmentVO.setEquipmentId("1");
+        equipmentVO.setEquipmentId(Integer.toString(id));
         equipmentVO.setEquipmentName("Model R2D2");
+        equipmentVO.setEquipmentModelId("1");
         equipmentVO.setEquipmentModelCode("R2D2");
+        equipmentVO.setEquipmentModelName("Model R2D2");
 
         return equipmentVO;
     }
