@@ -94,7 +94,6 @@ public class CamelTest extends CamelTestSupport {
                 ExecutorService lowPool = new ThreadPoolBuilder(context)
                         .poolSize(1).maxPoolSize(5).build("LowPool");
 
-
                 HawtDBAggregationRepository myRepo = new
                         HawtDBAggregationRepository("myrepo", "data/myrepo.dat");
 
@@ -112,7 +111,6 @@ public class CamelTest extends CamelTestSupport {
                         .log("Incoming message ${body}")
                         .wireTap("direct:tap")
                         .to("mock:result");
-
 
                 from("direct:tap")
                         .log("Tapped message ${body}")
