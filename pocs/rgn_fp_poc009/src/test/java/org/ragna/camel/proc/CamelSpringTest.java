@@ -1,11 +1,7 @@
 package org.ragna.camel.proc;
 
-import javax.jms.ConnectionFactory;
-
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.camel.EndpointInject;
-import org.apache.camel.Exchange;
-import org.apache.camel.Predicate;
 import org.apache.camel.Produce;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
@@ -21,36 +17,42 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 
+import javax.jms.ConnectionFactory;
 import java.util.List;
 
 /**
  * Created by ragnarokkrr on 24/03/15.
- *
+ * <p/>
  * take a look http://svn.apache.org/repos/asf/camel/trunk/camel-core/src/test/java/org/apache/camel/processor/ComposedMessageProcessorTest.java
  */
-@ContextConfiguration(
-
-)
+@ContextConfiguration
 @Import({CamelSpringTest.CamelContextConfig.class
-    , CamelSpringTest.BeansConfiguration.class})
+        , CamelSpringTest.BeansConfiguration.class})
 public class CamelSpringTest extends AbstractJUnit4SpringContextTests {
 
+/*
     @EndpointInject(uri = "mock:result")
     protected MockEndpoint resultEndpoint;
+*/
 
     @EndpointInject(uri = "mock:result:aggregate")
     protected MockEndpoint resultAggregateEndpoint;
 
 
+/*
     @Produce(uri = "direct:start")
     protected ProducerTemplate template;
+*/
 
+/*
     @Produce(uri = "direct:hazelcast")
     protected ProducerTemplate hazelTemplate;
+*/
 
     @Produce(uri = "direct:person:start")
     protected ProducerTemplate personTemplate;
 
+/*
     @DirtiesContext
     @org.junit.Test
     public void testSendMatchingMessage() throws Exception {
@@ -65,20 +67,17 @@ public class CamelSpringTest extends AbstractJUnit4SpringContextTests {
         resultEndpoint.assertIsSatisfied();
 
     }
+*/
 
     @DirtiesContext
     @org.junit.Test
     public void testAggregate() throws Exception {
 
-        // template.sendBody("hazelcast:queue:myqueue:put", "test");
-
         personTemplate.sendBodyAndHeader("init", "procId", 4666);
 
-        resultAggregateEndpoint.getExchanges();
+        Thread.sleep(3000);
 
-        System.out.println(resultAggregateEndpoint.getExchanges().get(0).getIn().getBody(List.class));
-        // resultEndpoint.assertIsSatisfied();
-
+        resultAggregateEndpoint.getExchanges().get(0).getIn().getBody(List.class);
     }
 
     @Configuration
@@ -111,6 +110,7 @@ public class CamelSpringTest extends AbstractJUnit4SpringContextTests {
                 public void configure() throws Exception {
                     startAmq();
 
+/*
                     from("direct:start")
                             .filter(header("foo").isEqualTo("bar")).to("mock:result");
 
@@ -122,29 +122,33 @@ public class CamelSpringTest extends AbstractJUnit4SpringContextTests {
                             .log("===================> ${body}")
                             .setHeader(HazelcastConstants.OPERATION, constant(HazelcastConstants.INCREMENT_OPERATION))
                             .toF("hazelcast:%sprocId", HazelcastConstants.ATOMICNUMBER_PREFIX)
-                            // .setBody("new body '${body}'")
+                                    // .setBody("new body '${body}'")
                             .log("===================> ${header[procId]}")
                             .log("===================> ${headers}")
                             .log("===================> ${body}")
 
                     ;
-
-                    from("direct:person:start")
+*/
+                    from("direct:person:start").id("person-production")
                             .beanRef("personPlanningProcessor")
-                            .log("=====> BEFORE SPLIT ${body} procId: ${header[procId]}")
+                            //.log("=====> BEFORE SPLIT ${body} procId: ${header[procId]}")
                             .split().body().parallelProcessing()
                                 .beanRef("personRepository", "findById")
-                                .log("=====> AFTER SPLIT ${body} procId: ${header[procId]}")
+                                //.log("=====> AFTER SPLIT ${body} procId: ${header[procId]}")
                                 .beanRef("personUpdaterProcessor")
-                                .log("=====> AFTER UPDATE ${body} procId: ${header[procId]}")
-                            .to("seda:aggregate:person");
+                                .to("seda:aggregate:person")
+                            .end()
+                    ;
 
-                    from("seda:aggregate:person")
-                            .log("################### SEDA ${body} ########")
-                            .aggregate(new PersonAggregationStrategy()).header("procId").completionTimeout(5 * 1000L)
-                            .log("################### AGGREGATE ${body} ########")
-                            .to("mock:result:aggregate");
-                            ;
+                    from("seda:aggregate:person?concurrentConsumers=5").id("person-aggregation")
+                            //.log("################### SEDA ${body} ########")
+                            .aggregate(header("procId"), new PersonCollectionAggregationStrategy())
+                                .completionTimeout(1000L)
+                                .log("################### AGGREGATE ${body} ########")
+                                .to("mock:result:aggregate")
+                            .end()
+
+                    ;
 
                 }
 

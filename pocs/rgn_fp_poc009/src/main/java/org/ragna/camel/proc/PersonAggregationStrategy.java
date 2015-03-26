@@ -14,7 +14,6 @@ import org.ragna.camel.proc.model.Person;
 public class PersonAggregationStrategy implements AggregationStrategy {
 
 
-
     public Exchange aggregateOld(Exchange oldExchange, Exchange newExchange) {
 
         if (oldExchange == null) {
@@ -33,13 +32,27 @@ public class PersonAggregationStrategy implements AggregationStrategy {
         people.add(newExchange.getIn().getBody(Person.class));
 
 
-
         oldExchange.getIn().setBody(people);
         return oldExchange;
     }
 
     @Override
     public Exchange aggregate(Exchange oldExchange, Exchange newExchange) {
+        if (oldExchange == null) {
+            List<Person> people = new ArrayList<>();
+            Person newPeople = newExchange.getIn().getBody(Person.class);
+            people.add(newPeople);
+            newExchange.getIn().setBody(people);
+            return newExchange;
+        }
+        List<Person> people = oldExchange.getIn().getBody(List.class);
+        Person newOutPerson = newExchange.getIn().getBody(Person.class);
+        people.add(newOutPerson);
+        oldExchange.getIn().setBody(people);
+        return oldExchange;
+    }
+
+    public Exchange aggregateOld2(Exchange oldExchange, Exchange newExchange) {
         Message newIn = newExchange.getIn();
         Object newBody = newIn.getBody();
         ArrayList list = null;
