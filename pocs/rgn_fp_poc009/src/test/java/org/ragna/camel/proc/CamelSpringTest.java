@@ -1,14 +1,12 @@
 package org.ragna.camel.proc;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
-import org.apache.camel.EndpointInject;
-import org.apache.camel.Produce;
-import org.apache.camel.ProducerTemplate;
+import org.apache.camel.*;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.component.hazelcast.HazelcastConstants;
 import org.apache.camel.component.jms.JmsComponent;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.spring.javaconfig.SingleRouteCamelConfiguration;
+import org.ragna.camel.proc.model.Person;
 import org.ragna.camel.proc.model.PersonRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -73,7 +71,9 @@ public class CamelSpringTest extends AbstractJUnit4SpringContextTests {
     @org.junit.Test
     public void testAggregate() throws Exception {
 
-        personTemplate.sendBodyAndHeader("init", "procId", 4666);
+        //personTemplate.sendBodyAndHeader("init", "procId", 4666);
+
+        List<Person> people = (List<Person>) personTemplate.requestBodyAndHeader("init", "procId", 4666);
 
         Thread.sleep(3000);
 
@@ -97,6 +97,12 @@ public class CamelSpringTest extends AbstractJUnit4SpringContextTests {
         public PersonUpdaterProcessor personUpdaterProcessor() {
             return new PersonUpdaterProcessor();
         }
+
+        @Bean
+        public PersonUpdater2Processor personUpdater2Processor() {
+            return new PersonUpdater2Processor();
+        }
+
 
     }
 
@@ -129,25 +135,42 @@ public class CamelSpringTest extends AbstractJUnit4SpringContextTests {
 
                     ;
 */
-                    from("direct:person:start").id("person-production")
-                            .beanRef("personPlanningProcessor")
-                            //.log("=====> BEFORE SPLIT ${body} procId: ${header[procId]}")
-                            .split().body().parallelProcessing()
-                                .beanRef("personRepository", "findById")
-                                //.log("=====> AFTER SPLIT ${body} procId: ${header[procId]}")
-                                .beanRef("personUpdaterProcessor")
-                                .to("seda:aggregate:person")
-                            .end()
+
+                    from("direct:person:start").id("person-synching")
+                            .setExchangePattern(ExchangePattern.InOut)
+                            .to("seda:person:planning")
                     ;
 
-                    from("seda:aggregate:person?concurrentConsumers=5").id("person-aggregation")
-                            //.log("################### SEDA ${body} ########")
-                            .aggregate(header("procId"), new PersonCollectionAggregationStrategy())
-                                .completionTimeout(1000L)
-                                .log("################### AGGREGATE ${body} ########")
-                                .to("mock:result:aggregate")
+                    from("seda:person:planning").id("person-planning-split")
+                            .beanRef("personPlanningProcessor")
+                            .log("=====> BEFORE SPLIT ${body} procId: ${header[procId]}")
+                            .split(body(), new PersonCollectionAggregationStrategy()).parallelProcessing()
+//                                .beanRef("personRepository", "findById")
+//                                .log("=====> AFTER SPLIT ${body} procId: ${header[procId]}")
+//                                .beanRef("personUpdaterProcessor")
+                            .inOut("direct:person:process")
+                            .inOnly("seda:progress")
                             .end()
+                            .to("seda:aggregate:person:result")
+                    ;
 
+                    from("direct:person:process").id("person-process")
+                            .beanRef("personRepository", "findById")
+                            .beanRef("personUpdaterProcessor")
+                            .beanRef("personUpdater2Processor")
+                            .log("=====> AFTER SPLIT Process ${body} procId: ${header[procId]}")
+                    ;
+
+                    from("seda:aggregate:person:result").id("person-aggregate")
+                            .log("=====> AGGREGATE RESULT ${body} ########")
+                            .to("mock:result:aggregate")
+                    ;
+
+                    from("seda:progress").id("person-progress")
+                            .log(LoggingLevel.DEBUG, "=====> PROGRESS ${body.name} ${header[procId]} ${header[person.allIds]}")
+                            .transform().groovy("1 / exchange.in.headers['person.allIds'].size() * 100")
+                            .transform().groovy("sprintf ('%.2f', exchange.in.body)")
+                            .log("=====> PROGRESS increment for Process ID '${header[procId]}': ${body}%")
                     ;
 
                 }
