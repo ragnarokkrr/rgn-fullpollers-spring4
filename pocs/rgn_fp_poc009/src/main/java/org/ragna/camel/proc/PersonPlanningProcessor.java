@@ -19,8 +19,6 @@ public class PersonPlanningProcessor implements Processor {
     @Override
     public void process(Exchange exchange) throws Exception {
         final List<Long> allIds = personRepository.findAllIds();
-        System.out.printf("============================ \n\t %s \n==========================\n"
-                , allIds);
 
         exchange.getIn().setHeader("person.allIds", allIds);
         exchange.getIn().setBody(allIds);
